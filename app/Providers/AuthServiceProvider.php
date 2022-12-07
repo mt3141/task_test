@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Access\Gate as AccessGate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,9 +24,15 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(AccessGate $gate)
     {
-        $this->registerPolicies();
+        $this->registerPolicies($gate);
+        $gate->define('is_admin', function($user) {
+            return $user->role == 'Admin';
+
+        });
+        Passport::routes();
+        Passport::personalAccessTokensExpireIn(Carbon::now()->addHours(24));
 
         //
     }
