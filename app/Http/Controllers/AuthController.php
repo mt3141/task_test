@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
-use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
@@ -12,12 +11,6 @@ use JWTAuth;
 class AuthController extends Controller
 {
 
-    protected $repository;
-
-    public function __construct(UserRepository $repository)
-    {
-        $this->repository = $repository;
-    }
 
     /**
      * @param LoginRequest $request

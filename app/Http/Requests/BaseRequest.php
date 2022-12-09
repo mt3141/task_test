@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\ResponseHelper;
 use App\Traits\RequestValidationTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -34,7 +33,7 @@ class BaseRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
-            ResponseHelper::error([
+            response()->json([
                 [
                     'type' => 'error',
                     'text' => $validator->errors()

@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\ResponseHelper;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
@@ -23,26 +23,26 @@ class JwtMiddleware
             $user = JWTAuth::parseToken()->authenticate();
         } catch (\Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return ResponseHelper::error([
+                return response()->json([
                     [
                         'type' => 'error',
                         'text' => 'Token is Invalid'
                     ]
-                ]);
+                ],Response::HTTP_BAD_REQUEST);
             } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return ResponseHelper::error([
+                return response()->json([
                     [
                         'type' => 'error',
                         'text' => 'Token in Expired'
                     ]
-                ]);
+                ],Response::HTTP_UNAUTHORIZED);
             } else {
-                return ResponseHelper::error([
+                return response()->json([
                     [
                         'type' => 'error',
                         'text' => 'Authorization Token not found'
                     ]
-                ]);
+                ],Response::HTTP_BAD_REQUEST);
             }
         }
         return $next($request);
